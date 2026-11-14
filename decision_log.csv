@@ -1,0 +1,4 @@
+ts,scope,status,canonical,reason_code,reason,owner,evidence
+2026-11-14T09:24:33+00:00,t02,HOLD,HOLD,HIGH_DEFECT_RATE_HOLD,High defect rate (58/96 = 60.4%); pending human sign-off on review queue,Hung Vu (QA Lead),out\poc\ranked_review.csv;out\poc\review_queue.csv
+2026-11-14T09:25:09+00:00,t02,REWORK,REWORK,RECAPTURE_REQUIRED,High defect rate (58/96 = 60.4%); triage confirmed defective images require recapture,Hung Vu (QA Lead),out\poc\ranked_review.csv;out\poc\review_queue.csv
+2026-11-14T09:46:05+00:00,t02,REWORK,REWORK,RECAPTURE_REQUIRED,High defect rate (58/96 = 60.4%); triage confirmed defective images require recapture,Hung Vu (QA Lead),out\poc\ranked_review.csv;out\poc\review_queue.csv

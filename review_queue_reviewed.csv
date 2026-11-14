@@ -1,0 +1,21 @@
+rank,item_id,score,reason,suggested_action,slice,evidence_path,reviewer,reviewer_decision,override_value,review_note,reviewed_at
+1,img_09_2,1.0429,blur,RECAPTURE,day,images/img_09_2.jpg,Hung Vu,approve,RECAPTURE,Confirmed heavy motion blur across whole frame,2026-11-14T09:25:00Z
+2,img_21_2,1.0424,blur,RECAPTURE,day,images/img_21_2.jpg,Hung Vu,approve,RECAPTURE,Defocus blur unreadable plates,2026-11-14T09:25:10Z
+3,img_18_3,1.0423,blur,RECAPTURE,night,images/img_18_3.jpg,Hung Vu,approve,RECAPTURE,Severe night blur road details lost,2026-11-14T09:25:20Z
+4,img_13_3,1.0422,blur,RECAPTURE,night,images/img_13_3.jpg,Hung Vu,approve,RECAPTURE,Heavy blur on night capture,2026-11-14T09:25:30Z
+5,img_15_2,1.042,blur,RECAPTURE,dusk,images/img_15_2.jpg,Hung Vu,approve,RECAPTURE,Confirmed severe blur in dusk lighting,2026-11-14T09:25:40Z
+6,img_04_3,1.0373,blur,RECAPTURE,dusk,images/img_04_3.jpg,Hung Vu,approve,RECAPTURE,Severe blur cannot identify lane markings,2026-11-14T09:25:50Z
+7,img_07_3,1.0342,blur,RECAPTURE,day,images/img_07_3.jpg,Hung Vu,approve,RECAPTURE,Blurry vehicle silhouettes,2026-11-14T09:26:00Z
+8,img_11_3,1.0338,blur,RECAPTURE,day,images/img_11_3.jpg,Hung Vu,approve,RECAPTURE,Blur confirmed,2026-11-14T09:26:10Z
+9,img_19_3,1.0336,blur,RECAPTURE,day,images/img_19_3.jpg,Hung Vu,approve,RECAPTURE,Heavy blur,2026-11-14T09:26:20Z
+10,img_16_2,1.0328,blur,RECAPTURE,day,images/img_16_2.jpg,Hung Vu,approve,RECAPTURE,Unusable blur,2026-11-14T09:26:30Z
+11,img_14_2,1.0317,blur,RECAPTURE,day,images/img_14_2.jpg,Hung Vu,approve,RECAPTURE,Heavy blur,2026-11-14T09:26:40Z
+12,img_00_3,1.0313,blur,RECAPTURE,day,images/img_00_3.jpg,Hung Vu,approve,RECAPTURE,Cam_B heavy blur confirmed,2026-11-14T09:26:50Z
+13,img_15_3,1.0204,blur,RECAPTURE,dusk,images/img_15_3.jpg,Hung Vu,approve,RECAPTURE,Severe blur and underexposed,2026-11-14T09:27:00Z
+14,img_01_2,0.9983,dark,RECAPTURE,night,images/img_01_2.jpg,Hung Vu,approve,RECAPTURE,Completely underexposed pitch black night frame,2026-11-14T09:27:10Z
+15,img_23_3,0.9976,dark,RECAPTURE,day,images/img_23_3.jpg,Hung Vu,approve,RECAPTURE,Under-exposed daytime frame,2026-11-14T09:27:20Z
+16,img_17_3,0.9972,dark,RECAPTURE,day,images/img_17_3.jpg,Hung Vu,approve,RECAPTURE,Sensor failure dark frame,2026-11-14T09:27:30Z
+17,img_12_3,0.9936,dark,RECAPTURE,dusk,images/img_12_3.jpg,Hung Vu,approve,RECAPTURE,Heavy dark defect in dusk scene,2026-11-14T09:27:40Z
+18,img_08_3,0.9932,dark,RECAPTURE,dusk,images/img_08_3.jpg,Hung Vu,approve,RECAPTURE,Extreme darkness mean < 15,2026-11-14T09:27:50Z
+19,img_20_2,0.9883,dark,RECAPTURE,day,images/img_20_2.jpg,Hung Vu,approve,RECAPTURE,Darkness defect,2026-11-14T09:28:00Z
+20,img_02_3,0.988,dark,RECAPTURE,day,images/img_02_3.jpg,Hung Vu,approve,RECAPTURE,Darkness defect confirmed,2026-11-14T09:28:10Z
