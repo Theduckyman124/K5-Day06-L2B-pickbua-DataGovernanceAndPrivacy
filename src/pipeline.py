@@ -10,14 +10,18 @@ from __future__ import annotations
 
 from pathlib import Path
 import numpy as np
+from pathlib import Path
+import numpy as np
 import pandas as pd
 from PIL import Image
 
+from .common.contact_sheet import render_contact_sheet
 from .common.contact_sheet import render_contact_sheet
 from .common.context import RunContext
 from .common.decision import Decision, write_decision
 from .common.image_ops import load_rgb, to_gray
 from .common.manifest import verify_manifest
+from .common.review import apply_overrides, load_review_decisions, make_review_queue, write_review_queue
 from .common.review import apply_overrides, load_review_decisions, make_review_queue, write_review_queue
 from .metrics.tracks import get_track
 
@@ -190,6 +194,27 @@ def process(ctx: RunContext, data: dict) -> pd.DataFrame:
 
     df = pd.DataFrame(records)
     return df.sort_values("score", ascending=False).reset_index(drop=True)
+
+    images = data.get("images")
+    if images is None or "image_id" not in images.columns:
+        raise ValueError("T02 requires images.csv with 'image_id'")
+
+    rows = []
+    for _, item in images.iterrows():
+        img_p = ctx.input_dir / item["path"]
+        cam = str(item.get("camera_id", "cam_A"))
+        light = str(item.get("light", "day"))
+        defect_info = _detect_image_defects(img_p, cam, light)
+        rows.append({
+            "image_id": item["image_id"],
+            "score": defect_info["score"],
+            "pred_defect_type": defect_info["pred_defect_type"],
+            "pred_action": defect_info["pred_action"],
+            "path": item["path"],
+            "camera_id": cam,
+            "light": light,
+        })
+    return pd.DataFrame(rows)
 
 
 # ---------------------------------------------------------------- 03 rank
