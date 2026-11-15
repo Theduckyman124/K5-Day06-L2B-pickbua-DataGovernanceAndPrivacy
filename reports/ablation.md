@@ -38,7 +38,8 @@ Vì dev có đúng 28 ảnh lỗi và B = 28, Precision@28 = Recall@28 ở cả 
 
 - Ba failure mode của baseline được thấy rõ trên dev: **lóa cục bộ** bị bỏ sót (glare 1/4), **cam_B** bị báo nhầm
   (3 ảnh cam_B sạch bị gắn RECAPTURE, false alarm cam_B 0.5), và ảnh **night** sạch lọt top-28 (0.5, N = 2).
-  PoC xử lý được cả ba trên dev: glare 4/4, không còn ảnh cam_B sạch nào bị gắn RECAPTURE, night false alarm 0.
+  PoC cải thiện cả ba trên dev: glare 4/4; ảnh cam_B sạch bị gắn RECAPTURE giảm 3 → 1 (ảnh còn lại, `img_12_0`, bị báo
+  compression chứ không phải do độ mềm — failure case 2); night false alarm 0.
 - PoC **kém hơn baseline ở `dark`** (3/6 so với 6/6): bốn ảnh ban ngày bị thiếu sáng vừa phải bị PoC coi là sạch
   (failure case 1 trong `reports/failure_cases.md`).
 - PoC báo nhầm hai ảnh hoàng hôn sạch là `compression` (failure case 2), làm false alarm dusk tăng (0.125 → 0.250).

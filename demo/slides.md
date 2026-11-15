@@ -42,7 +42,7 @@ title: T02 Raw QC Triage — Showcase
 | Baseline Laplacian | 0.821 | 0.64–0.92 | 3 (đều cam_B) |
 | **PoC sigmoid** | **0.893** | 0.73–0.96 | 2 (dusk) |
 
-- PoC sửa được 3 failure mode của baseline trên dev: glare 1/4 → 4/4 · cam_B sạch bị báo nhầm 3 → 0 · night sạch lọt top 0.5 → 0
+- PoC cải thiện 3 failure mode của baseline trên dev: glare 1/4 → 4/4 · cam_B sạch bị báo nhầm 3 → 1 · night sạch lọt top 0.5 → 0
 - Ablation: nhánh blur đóng góp nhiều nhất (bỏ đi: 0.893 → 0.750); nhánh compression gây cả 2 false alarm
 - Không phải metric chính thức; CI chồng lấn → chưa khẳng định PoC hơn baseline có ý nghĩa thống kê
 
