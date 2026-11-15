@@ -1,6 +1,6 @@
 member,git_author_name,git_email,role,modules_files,commit_shas,evidence_note,presenter
-Member 1,,,Lead / Integrator,src/main.py; configs/,,,
-Member 2,,,Data & fixtures,fixtures/; tools/,,,
-Member 3,,,Core algorithm,src/pipeline.py,,,
-Member 4,huudang-de,dang36390@gmail.com,QA / metric,tests/test_t02_pipeline.py; reports/metric_contract.md; reports/metrics_*.json; src/baseline_t02.py,,,
-Member 5,Duong Manh Huy,manhhuy2104@gmail.com,Human review + report,src/pipeline.py (review/decide); reports/review_policy.md; reports/review_queue.csv; reports/decision_log.csv; reports/group_report.md; demo/,40eb1ff,Contributor row; review policy (per-image decisions + KEEP/HOLD/RECAPTURE batch policy),yes
+Member 1,Theduckyman124,nguyenthaiduc01022004@gmail.com,Lead / Integrator,configs/lab.yaml,4a53031; 2fe56eb,Nguyễn Thái Đức: chọn track T02 và owner trong configs/lab.yaml,no
+Member 2,DucViet; phamducviet,ducvietytb19@gmail.com; pdviet1909@gmail.com,Data & fixtures,src/pipeline.py (load; process),53726b5; f8cee57; 47cf858,Phạm Đức Việt: thuật toán sigmoid 4 loại lỗi + load() quét thư mục ảnh; giải conflict và gộp PR #3,no
+Member 3,Hưng Vũ; hungvu208,hungdabc1234@gmail.com,Core algorithm,pipeline.py (nhánh hungvu),6002a57; 3cdc2b1; 58b8c02,Vũ Hưng: bản pipeline đầu tiên kèm output chạy thử; chỉ trên nhánh origin/hungvu,no
+Member 4,huudang-de; HuuDang_47,dang36390@gmail.com,QA / metric,reports/metric_contract.md; src/baseline_t02.py; tests/test_t02_pipeline.py,e44ff01; c5d9899,Nguyễn Hữu Đăng: metric contract + baseline Laplacian + nối dây PoC 5 bước + 3 unit test; gộp PR #2,no
+Member 5,Duong Manh Huy,manhhuy2104@gmail.com,Human review + report,src/pipeline.py (review; decide; params); configs/lab.yaml (params); reports/review_policy.md; reports/review_queue.csv; reports/decision_log.csv; reports/gold_set_*; reports/selfeval_dev_*.json; reports/ablation*; reports/failure_cases.md; reports/group_report.md; tools/t02_*.py; demo/,40eb1ff; 9a1ab1a; 43b98f3; 52d750d; 229a28a; ba5b2c2; 4a3f75f; 868387c; be1eca7; 4b1e82a; 84e903a,Dương Mạnh Huy: review policy + sửa review()/decide() + freeze + review thật top-20 + gold set dev + self-eval/ablation + failure cases + slides + report,yes
