@@ -1,0 +1,3 @@
+ts,scope,status,canonical,reason_code,reason,owner,evidence
+2026-11-15T04:16:40+00:00,t02,HOLD,HOLD,HIGH_DEFECT_RATE_HOLD,High defect rate (46/96 = 47.9%); pending human sign-off on review queue,Nguyen Thai Duc (Lead),out\poc\ranked_review.csv;out\poc\review_queue.csv
+2026-11-15T04:49:18+00:00,t02,REWORK,REWORK,RECAPTURE_REQUIRED,High defect rate (46/96 = 47.9%); triage confirmed defective images require recapture,Nguyen Thai Duc (Lead),out\poc\ranked_review.csv;out\poc\review_queue.csv

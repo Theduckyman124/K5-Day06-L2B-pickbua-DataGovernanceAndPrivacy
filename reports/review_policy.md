@@ -2,7 +2,7 @@
 
 | Mục | Giá trị |
 |---|---|
-| Phiên bản | 1.1 · 2026-11-14 |
+| Phiên bản | 1.2 · 2026-11-15 (kết quả review thật §6; số liệu §5 chạy lại trên commit freeze `ba5b2c2`) |
 | Soạn bởi | Duong Manh Huy — Human review + Report |
 | Người ký quyết định (owner) | theo trường `owner` trong `configs/lab.yaml` |
 | Áp dụng cho | `out/poc/review_queue.csv`, `out/poc/review_queue_reviewed.csv`, `review()` và `decide()` trong `src/pipeline.py` |
@@ -52,8 +52,9 @@ Override tác động lên cột **`pred_action`**. Giá trị hợp lệ của 
 | `glare` | vùng cháy trắng che vật thể, kể cả vùng nhỏ như vùng biển số | đèn xe, đèn đường sáng nhưng không che vật thể |
 | `compression` | khối 8×8, viền răng cưa hoặc dải màu thấy rõ | nhiễu hạt nhẹ của ảnh đêm |
 
-Các tín hiệu pipeline dùng cho từng nhãn được khai báo trong `reports/metric_contract.md` (chuẩn hoá theo `camera_id` và `light`,
-glare theo patch 4×4, blockiness 8×8, ngưỡng gắn cờ `max_score ≥ 0.45`).
+Các tín hiệu pipeline dùng cho từng nhãn được khai báo trong `reports/metric_contract.md` và đóng băng trong `configs/lab.yaml`
+(`params:`): ngưỡng blur theo `camera_id`, ngưỡng dark và glare theo ngữ cảnh đêm, blockiness 8×8, gắn `RECAPTURE` khi
+xác suất lỗi lớn nhất `≥ flag_threshold = 0.25`.
 
 ### 2.3 Quy trình xem một ảnh
 
@@ -90,6 +91,7 @@ Ngưỡng là chính sách vận hành, không được tối ưu theo dữ li�
 - `out/poc/decision.json` và `out/poc/decision_log.csv` ghi: `status`, `reason_code`, `reason`, `owner`, `scope = t02`,
   `evidence` = [`ranked_review.csv`, `review_queue.csv`], `metrics` = {`n_total`, `n_recapture`, `recapture_rate`}.
 - Override được ghi trong `out/poc/audit_log.jsonl` (`actor`, `action`, `item_id`, `before`, `after`, `reason`).
+  File chỉ được tạo khi có ít nhất một override; không có file nghĩa là không có `reject`/`edit` nào được áp dụng.
 - **Escalate:** owner xem ảnh và ghi quyết định cuối cùng vào chính file review (`reject` / `edit` kèm `override_value`,
   `reviewer` = tên owner, `review_note` = lý do), sau đó chạy lại pipeline. Batch không được công bố trong khi còn dòng `escalate`.
 
@@ -104,25 +106,52 @@ Ngưỡng là chính sách vận hành, không được tối ưu theo dữ li�
 
 ## 5. Kiểm thử policy
 
-Chạy với file review mô phỏng trong thư mục output riêng (`out/poc_try`), `--offline --seed 42`, trên commit `cdf39bf`.
+Chạy với file review mô phỏng trong thư mục output riêng (`out/poc_try`), `--offline --seed 42`, trên commit freeze `ba5b2c2`.
 T1–T3 đồng thời được phủ bởi `tests/test_t02_pipeline.py`.
 
-| # | File review | Kết quả mong đợi | Kết quả chạy (2026-11-14) |
+| # | File review | Kết quả mong đợi | Kết quả chạy (2026-11-15) |
 |---|---|---|---|
-| T1 | không có file | exit 0; `status` ∈ {HOLD, GO, REWORK}; `owner` có giá trị | exit 0 · `HOLD / HIGH_DEFECT_RATE_HOLD` · 58/96 ảnh RECAPTURE (60.4%) |
-| T2 | 1 dòng `edit`, `override_value = KEEP` | ảnh đó `pred_action = KEEP`; audit log có `override:edit`, `after = KEEP` | đạt (`img_09_2` → KEEP, 1 sự kiện `override:edit`) |
+| T1 | không có file | exit 0; `status` ∈ {HOLD, GO, REWORK}; `owner` có giá trị | exit 0 · `HOLD / HIGH_DEFECT_RATE_HOLD` · 46/96 ảnh RECAPTURE (47.9%) |
+| T2 | 1 dòng `edit`, `override_value = KEEP` | ảnh đó `pred_action = KEEP`; audit log có `override:edit`, `after = KEEP` | đạt (`img_00_2` → KEEP, 1 sự kiện `override:edit`) |
 | T3 | 1 dòng có quyết định nhưng thiếu `reviewer` | exit 2 | exit 2 |
 | T4 | không có file, `recapture_rate > 0.20` | `HOLD / HIGH_DEFECT_RATE_HOLD` | đạt |
 | T5 | 20/20 `approve`, `recapture_rate > 0.20` | `REWORK / RECAPTURE_REQUIRED` | đạt |
-| T6 | `reject → KEEP` cho toàn bộ ảnh RECAPTURE trong top-20 | 20 sự kiện `override:reject`; `recapture_rate` giảm đúng 20/96 | đạt: 58 → 38 ảnh (39.6%), vẫn `REWORK / RECAPTURE_REQUIRED` |
+| T6 | `reject → KEEP` cho toàn bộ ảnh RECAPTURE trong top-20 | 20 sự kiện `override:reject`; `recapture_rate` giảm đúng 20/96 | đạt: 46 → 26 ảnh (27.1%), vẫn `REWORK / RECAPTURE_REQUIRED` |
 | T7 | `reviewer_decision = maybe` | exit 2 | exit 2 |
-| T8 | `edit → KEEP` cho 1 ảnh | `score` của mọi ảnh không đổi | đạt (`img_09_2`: 1.0429 → 1.0429) |
+| T8 | `edit → KEEP` cho 1 ảnh | `score` của mọi ảnh không đổi | đạt (`img_00_2`: 0.98 → 0.98) |
 | T9 | 1 dòng `escalate`, 1 dòng `reject` để trống `override_value` | không có override nào được áp dụng; batch xử lý escalate theo §3.3 | đạt: 0 sự kiện override; pipeline trả `REWORK / RECAPTURE_REQUIRED` |
 
 Với kết quả T1, review chỉ có thể đưa batch về `GO` khi số ảnh RECAPTURE ngoài top-20 không vượt 19 (20% của 96);
-ở trạng thái hiện tại batch luôn kết thúc ở `REWORK` sau review. Mức gắn cờ 60.4% được báo cáo cùng kết quả đánh giá.
+pipeline gắn 26 ảnh RECAPTURE ngoài top-20, nên batch luôn kết thúc ở `REWORK` sau review (T6).
+Mức gắn cờ 47.9% được báo cáo cùng kết quả đánh giá.
 
-## 6. Liên kết với metric contract
+## 6. Kết quả review thật
+
+| Mục | Giá trị |
+|---|---|
+| Thời điểm | 2026-11-15, sau commit freeze `ba5b2c2` |
+| Reviewer | Duong Manh Huy |
+| Phạm vi | top-20 của `out/poc/review_queue.csv`: 12 ảnh `eval`, 8 ảnh `dev`; 16 cam_A, 4 cam_B; 11 day, 5 dusk, 4 night |
+| Cách xem | mỗi ảnh so với ảnh gốc cùng cảnh `img_XX_0`, ghi `review_note` theo §2.3 cho 20/20 ảnh |
+| Quyết định | 20 `approve` · 0 `reject` · 0 `edit` · 0 `escalate` · 0 `skip` |
+| Loại lỗi quan sát | compression 10 · dark 4 · glare 3 · blur 3 — trùng `pred_defect_type` ở 20/20 ảnh |
+| Đồng thuận reviewer với pipeline trong top-20 | 20/20 (Wilson 95% CI 0.839–1.000) — đánh giá của reviewer, không phải ground truth và không phải metric chính |
+| Override / audit log | không có override, không phát sinh `audit_log.jsonl`; đường override được kiểm bằng T2, T6 và `tests/test_t02_pipeline.py` |
+| Quyết định batch | trước review `HOLD / HIGH_DEFECT_RATE_HOLD` → sau review `REWORK / RECAPTURE_REQUIRED` (46/96 = 47.9%) · owner: Nguyen Thai Duc (Lead) |
+| Bằng chứng | `reports/review_queue.csv` (bản đã review) · `reports/decision_log.csv` (2 dòng trước/sau review) · `demo/review_contact_sheet.png` |
+
+Ba nhóm rủi ro trong queue:
+
+- **Ảnh đêm** (`img_01_2`, `img_06_2`, `img_13_3`, `img_01_3`): cả bốn kém rõ rệt so với ảnh đêm gốc cùng cảnh (tối hơn hẳn,
+  vỡ khối hoặc nhoè, biển số không đọc được), nên là lỗi thật chứ không phải ảnh đêm tối tự nhiên.
+- **Lóa** (`img_05_3`, `img_17_2`, `img_22_3`): vùng lóa che vật thể (biển số xe trái, người đi bộ, xe máy); ở `img_17_2`
+  và `img_22_3` biển số vẫn đọc được, lỗi nằm ở vật thể khác bị che.
+- **cam_B** (`img_00_2`, `img_06_2`, `img_21_3`, `img_15_3`): lỗi compression hoặc dark rõ, không phải độ mềm quang học của cam_B.
+
+Top-20 không có false alarm theo đánh giá của reviewer. Review chỉ phủ 20 ảnh có `score` cao nhất; 26 ảnh RECAPTURE còn lại và
+các ảnh KEEP không được người xem, nên kết quả này không cho biết tỉ lệ báo nhầm hay bỏ sót ngoài queue.
+
+## 7. Liên kết với metric contract
 
 | Mục | Metric contract | Review policy |
 |---|---|---|
