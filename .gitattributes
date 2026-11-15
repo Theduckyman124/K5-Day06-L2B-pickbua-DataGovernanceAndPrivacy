@@ -1,0 +1,3 @@
+# Keep fixture bytes identical on every OS: manifest.csv stores sha256 of each file,
+# so CRLF conversion on Windows checkouts would break provenance checks.
+fixtures/** -text
