@@ -1,0 +1,92 @@
+{
+  "run_name": "random",
+  "labels": "reports/gold_set_dev.csv",
+  "pred": "out/random/ranked_review.csv",
+  "N": 56,
+  "B": 28,
+  "n_defects": 28,
+  "Defect Recall@B": 0.5,
+  "recall_num_den": [
+    14,
+    28
+  ],
+  "recall_wilson95": [
+    0.3263,
+    0.6737
+  ],
+  "Precision@B": 0.5,
+  "precision_num_den": [
+    14,
+    28
+  ],
+  "precision_wilson95": [
+    0.3263,
+    0.6737
+  ],
+  "n_flagged_recapture": 0,
+  "slices": [
+    {
+      "slice": "light=day",
+      "n": 36,
+      "recall_in_topB": 0.5556,
+      "false_alarm_in_topB": 0.5556,
+      "clean_flagged_recapture": 0
+    },
+    {
+      "slice": "light=dusk",
+      "n": 16,
+      "recall_in_topB": 0.5,
+      "false_alarm_in_topB": 0.375,
+      "clean_flagged_recapture": 0
+    },
+    {
+      "slice": "light=night",
+      "n": 4,
+      "recall_in_topB": 0.0,
+      "false_alarm_in_topB": 0.5,
+      "clean_flagged_recapture": 0
+    },
+    {
+      "slice": "camera_id=cam_A",
+      "n": 36,
+      "recall_in_topB": 0.5,
+      "false_alarm_in_topB": 0.5556,
+      "clean_flagged_recapture": 0
+    },
+    {
+      "slice": "camera_id=cam_B",
+      "n": 20,
+      "recall_in_topB": 0.5,
+      "false_alarm_in_topB": 0.4,
+      "clean_flagged_recapture": 0
+    },
+    {
+      "slice": "defect=blur",
+      "n": 8,
+      "recall_in_topB": 0.5,
+      "false_alarm_in_topB": null,
+      "clean_flagged_recapture": null
+    },
+    {
+      "slice": "defect=compression",
+      "n": 10,
+      "recall_in_topB": 0.6,
+      "false_alarm_in_topB": null,
+      "clean_flagged_recapture": null
+    },
+    {
+      "slice": "defect=dark",
+      "n": 6,
+      "recall_in_topB": 0.5,
+      "false_alarm_in_topB": null,
+      "clean_flagged_recapture": null
+    },
+    {
+      "slice": "defect=glare",
+      "n": 4,
+      "recall_in_topB": 0.25,
+      "false_alarm_in_topB": null,
+      "clean_flagged_recapture": null
+    }
+  ]
+}

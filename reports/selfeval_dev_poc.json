@@ -1,0 +1,93 @@
+{
+  "run_name": "poc",
+  "labels": "reports/gold_set_dev.csv",
+  "pred": "out/poc/ranked_review.csv",
+  "N": 56,
+  "B": 28,
+  "n_defects": 28,
+  "Defect Recall@B": 0.8928571428571429,
+  "recall_num_den": [
+    25,
+    28
+  ],
+  "recall_wilson95": [
+    0.728,
+    0.9629
+  ],
+  "Precision@B": 0.8928571428571429,
+  "precision_num_den": [
+    25,
+    28
+  ],
+  "precision_wilson95": [
+    0.728,
+    0.9629
+  ],
+  "n_flagged_recapture": 26,
+  "slices": [
+    {
+      "slice": "light=day",
+      "n": 36,
+      "recall_in_topB": 0.8333,
+      "false_alarm_in_topB": 0.0556,
+      "clean_flagged_recapture": 0
+    },
+    {
+      "slice": "light=dusk",
+      "n": 16,
+      "recall_in_topB": 1.0,
+      "false_alarm_in_topB": 0.25,
+      "clean_flagged_recapture": 2
+    },
+    {
+      "slice": "light=night",
+      "n": 4,
+      "recall_in_topB": 1.0,
+      "false_alarm_in_topB": 0.0,
+      "clean_flagged_recapture": 0
+    },
+    {
+      "slice": "camera_id=cam_A",
+      "n": 36,
+      "recall_in_topB": 0.8333,
+      "false_alarm_in_topB": 0.1111,
+      "clean_flagged_recapture": 1
+    },
+    {
+      "slice": "camera_id=cam_B",
+      "n": 20,
+      "recall_in_topB": 1.0,
+      "false_alarm_in_topB": 0.1,
+      "clean_flagged_recapture": 1
+    },
+    {
+      "slice": "defect=blur",
+      "n": 8,
+      "recall_in_topB": 1.0,
+      "false_alarm_in_topB": null,
+      "clean_flagged_recapture": null
+    },
+    {
+      "slice": "defect=compression",
+      "n": 10,
+      "recall_in_topB": 1.0,
+      "false_alarm_in_topB": null,
+      "clean_flagged_recapture": null
+    },
+    {
+      "slice": "defect=dark",
+      "n": 6,
+      "recall_in_topB": 0.5,
+      "false_alarm_in_topB": null,
+      "clean_flagged_recapture": null
+    },
+    {
+      "slice": "defect=glare",
+      "n": 4,
+      "recall_in_topB": 1.0,
+      "false_alarm_in_topB": null,
+      "clean_flagged_recapture": null
+    }
+  ],
+  "defect_type_accuracy_on_defects": 0.8571
+}

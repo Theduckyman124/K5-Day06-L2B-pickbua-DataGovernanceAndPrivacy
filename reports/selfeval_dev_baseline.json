@@ -1,0 +1,93 @@
+{
+  "run_name": "baseline",
+  "labels": "reports/gold_set_dev.csv",
+  "pred": "out/baseline/ranked_review.csv",
+  "N": 56,
+  "B": 28,
+  "n_defects": 28,
+  "Defect Recall@B": 0.8214285714285714,
+  "recall_num_den": [
+    23,
+    28
+  ],
+  "recall_wilson95": [
+    0.6441,
+    0.9212
+  ],
+  "Precision@B": 0.8214285714285714,
+  "precision_num_den": [
+    23,
+    28
+  ],
+  "precision_wilson95": [
+    0.6441,
+    0.9212
+  ],
+  "n_flagged_recapture": 14,
+  "slices": [
+    {
+      "slice": "light=day",
+      "n": 36,
+      "recall_in_topB": 0.7778,
+      "false_alarm_in_topB": 0.1667,
+      "clean_flagged_recapture": 2
+    },
+    {
+      "slice": "light=dusk",
+      "n": 16,
+      "recall_in_topB": 0.875,
+      "false_alarm_in_topB": 0.125,
+      "clean_flagged_recapture": 1
+    },
+    {
+      "slice": "light=night",
+      "n": 4,
+      "recall_in_topB": 1.0,
+      "false_alarm_in_topB": 0.5,
+      "clean_flagged_recapture": 0
+    },
+    {
+      "slice": "camera_id=cam_A",
+      "n": 36,
+      "recall_in_topB": 0.7222,
+      "false_alarm_in_topB": 0.0,
+      "clean_flagged_recapture": 0
+    },
+    {
+      "slice": "camera_id=cam_B",
+      "n": 20,
+      "recall_in_topB": 1.0,
+      "false_alarm_in_topB": 0.5,
+      "clean_flagged_recapture": 3
+    },
+    {
+      "slice": "defect=blur",
+      "n": 8,
+      "recall_in_topB": 1.0,
+      "false_alarm_in_topB": null,
+      "clean_flagged_recapture": null
+    },
+    {
+      "slice": "defect=compression",
+      "n": 10,
+      "recall_in_topB": 0.8,
+      "false_alarm_in_topB": null,
+      "clean_flagged_recapture": null
+    },
+    {
+      "slice": "defect=dark",
+      "n": 6,
+      "recall_in_topB": 1.0,
+      "false_alarm_in_topB": null,
+      "clean_flagged_recapture": null
+    },
+    {
+      "slice": "defect=glare",
+      "n": 4,
+      "recall_in_topB": 0.25,
+      "false_alarm_in_topB": null,
+      "clean_flagged_recapture": null
+    }
+  ],
+  "defect_type_accuracy_on_defects": 0.2857
+}
