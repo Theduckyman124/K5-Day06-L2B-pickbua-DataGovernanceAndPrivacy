@@ -98,6 +98,23 @@ def process(ctx: RunContext, data: dict) -> pd.DataFrame:
         raise NotImplementedError(f"Track {ctx.track} is not implemented in this group pipeline.")
 
     images_df: pd.DataFrame = data["images"]
+    if images_df is None or "image_id" not in images_df.columns:
+        raise ValueError("T02 requires images.csv with 'image_id'")
+
+    # Frozen params (configs/lab.yaml `params:`); defaults = values used before the freeze.
+    p = {k: float(ctx.param(k, v)) for k, v in {
+        "target_side": 360,
+        "blur_t_cam_a": 55.0,          # grad-var threshold, sharp optics
+        "blur_t_cam_b": 40.0,          # grad-var threshold, soft optics (cam_B)
+        "blur_slope": 0.08,
+        "dark_mean_day": 35.0,         # mean-gray pivot for day/dusk
+        "dark_mean_night": 14.0,       # mean-gray pivot for night scenes
+        "glare_sat_day": 0.0040,       # saturated-pixel fraction pivot
+        "glare_sat_night": 0.0020,
+        "comp_center": 1.65,           # 8x8 blockiness pivot
+        "flag_threshold": 0.25,        # top defect probability -> RECAPTURE
+    }.items()}
+
     records = []
 
     for _, row in images_df.iterrows():
@@ -109,7 +126,7 @@ def process(ctx: RunContext, data: dict) -> pd.DataFrame:
 
         # 1. Load and scale-normalize
         raw_img = load_rgb(img_path)
-        norm_img = _normalize_image_size(raw_img, target_side=360)
+        norm_img = _normalize_image_size(raw_img, target_side=int(p["target_side"]))
         gray = to_gray(norm_img)
 
         mean_val = float(gray.mean())
@@ -125,25 +142,25 @@ def process(ctx: RunContext, data: dict) -> pd.DataFrame:
 
         # A. Blur Detection (Sigmoid):
         # Soft optics (cam_B) drops to ~40; severe blur drops to < 30.
-        t_blur = 40.0 if cam_id == "cam_B" else 55.0
-        s_blur = _sigmoid(0.08 * (t_blur - grad_var))
+        t_blur = p["blur_t_cam_b"] if cam_id == "cam_B" else p["blur_t_cam_a"]
+        s_blur = _sigmoid(p["blur_slope"] * (t_blur - grad_var))
         if grad_var > t_blur * 2.0:
             s_blur *= 0.10
 
         # B. Dark Detection (Sigmoid):
         # Combines mean darkness, contrast loss (std), and dark pixel fraction.
         if is_night:
-            dark_sev = (14.0 - mean_val) + 0.5 * (18.0 - std_val) + 10.0 * (dark_frac - 0.70)
+            dark_sev = (p["dark_mean_night"] - mean_val) + 0.5 * (18.0 - std_val) + 10.0 * (dark_frac - 0.70)
             s_dark = _sigmoid(0.25 * dark_sev)
         else:
-            dark_sev = (35.0 - mean_val) + 15.0 * (dark_frac - 0.40)
+            dark_sev = (p["dark_mean_day"] - mean_val) + 15.0 * (dark_frac - 0.40)
             s_dark = _sigmoid(0.20 * dark_sev)
         if mean_val > 65.0:
             s_dark *= 0.10
 
         # C. Glare Detection (Sigmoid):
         # Saturation fraction above normal background.
-        t_sat = 0.0020 if is_night else 0.0040
+        t_sat = p["glare_sat_night"] if is_night else p["glare_sat_day"]
         s_glare = _sigmoid(800.0 * (sat_frac - t_sat))
         if sat_frac < 0.0008:
             s_glare *= 0.10
@@ -151,7 +168,7 @@ def process(ctx: RunContext, data: dict) -> pd.DataFrame:
         # D. Compression Artifacts (Sigmoid):
         # Measures 8x8 block boundary step discontinuity.
         blockiness = _compute_jpeg_blockiness(gray)
-        s_comp = _sigmoid(5.0 * (blockiness - 1.65))
+        s_comp = _sigmoid(5.0 * (blockiness - p["comp_center"]))
         if blockiness < 1.35:
             s_comp *= 0.10
 
@@ -166,7 +183,7 @@ def process(ctx: RunContext, data: dict) -> pd.DataFrame:
         top_defect_score = defect_scores[top_defect]
 
         # Smooth composite score: capped at 0.98 to avoid artificial 1.0 absolute certainty
-        if top_defect_score >= 0.25:
+        if top_defect_score >= p["flag_threshold"]:
             pred_type = top_defect
             pred_action = "RECAPTURE"
             reason = f"{top_defect} (conf={top_defect_score:.2f})"
@@ -191,27 +208,6 @@ def process(ctx: RunContext, data: dict) -> pd.DataFrame:
 
     df = pd.DataFrame(records)
     return df.sort_values("score", ascending=False).reset_index(drop=True)
-
-    images = data.get("images")
-    if images is None or "image_id" not in images.columns:
-        raise ValueError("T02 requires images.csv with 'image_id'")
-
-    rows = []
-    for _, item in images.iterrows():
-        img_p = ctx.input_dir / item["path"]
-        cam = str(item.get("camera_id", "cam_A"))
-        light = str(item.get("light", "day"))
-        defect_info = _detect_image_defects(img_p, cam, light)
-        rows.append({
-            "image_id": item["image_id"],
-            "score": defect_info["score"],
-            "pred_defect_type": defect_info["pred_defect_type"],
-            "pred_action": defect_info["pred_action"],
-            "path": item["path"],
-            "camera_id": cam,
-            "light": light,
-        })
-    return pd.DataFrame(rows)
 
 
 # ---------------------------------------------------------------- 03 rank

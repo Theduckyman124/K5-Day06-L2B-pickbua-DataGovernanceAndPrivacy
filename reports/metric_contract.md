@@ -14,7 +14,7 @@
 | Candidate pool cố định | `fixtures/t02_raw_qc/images.csv` (96 ảnh từ 24 cảnh gốc; `dev`: 56 ảnh, `eval`: 40 ảnh) |
 | Review budget B / K | B = 20 |
 | Seed | 42 |
-| Threshold policy (chọn trên dev như thế nào) | Baseline: 1 ngưỡng `laplacian_variance` (quantile 0.25 trên `dev`). PoC: chuẩn hoá `ref_var` theo `camera_id` (`cam_A`=800, `cam_B`=400) & `light` (`night` ×1.5), ngưỡng `light` (`day`/`dusk`/`night`), glare 4×4 patch (`max_patch_sat > 0.04`), JPEG 8×8 blockiness (`> 1.4`), ngưỡng flag `max_score >= 0.45` — đóng băng trước khi chạy `eval`. |
+| Threshold policy (chọn trên dev như thế nào) | Baseline: 1 ngưỡng `laplacian_variance` (quantile 0.25 trên `dev`). PoC (sigmoid, `53726b5`): 4 xác suất lỗi blur / dark / glare / compression; ngưỡng blur theo `camera_id` (`cam_A`=55, `cam_B`=40 trên gradient variance), ngưỡng dark và glare theo ngữ cảnh đêm (`light = night` hoặc tự nhận khi ảnh tối), JPEG 8×8 blockiness (tâm 1.65), gắn `RECAPTURE` khi xác suất lỗi lớn nhất `>= 0.25` — toàn bộ tham số đóng băng trong `configs/lab.yaml` `params:` (2026-11-15) trước khi chạy `eval` và trước vòng review top-20. |
 | Eval split (không dùng để tune) | `eval` (40 ảnh, chia theo cảnh gốc) |
 | Chỉ số lỗi xấu (miss / false alarm / false reject) | `False alarm in top-B` (ảnh sạch lọt top-20 / tổng ảnh sạch) và tỷ lệ bỏ sót lỗi (`1 - Defect Recall@B`) |
 | Slices sẽ báo cáo (≥2) | `light` (`day`, `dusk`, `night`), `defect_type` (`blur`, `glare`, `dark`, `compression`), và `camera_id` (`cam_A`, `cam_B`) |
