@@ -175,3 +175,28 @@ make eval-baseline eval-poc compare TRACK=tXX      # cần overlay giảng viên
 | Showcase & debate | 8 |
 
 Bonus: +5 verified E2E trước phút 180 (tag) · +5 ablation/hidden test thật · +5 debate tìm bug thật bằng test.
+
+## 8. Bài nộp — nhóm pickbua · T02 Raw QC Triage
+
+| Mục | Giá trị |
+|---|---|
+| Repo | https://github.com/Theduckyman124/K5-Day06-L2B-pickbua-DataGovernanceAndPrivacy |
+| Tag demo | `demo-180m` (`84e903a`) |
+| Tag nộp cuối | `final-24h` |
+| Report | `reports/group_report.md` · slides `demo/slides.md` |
+
+Chạy lại trên Windows (PowerShell, Python 3.11+; `pandas<3` vì Smart App Control chặn DLL của pandas 3.x):
+
+```powershell
+python -m venv .venv
+.venv\Scripts\python -m pip install -r requirements.txt "pandas>=2.1,<3"
+.venv\Scripts\python -m tools.preflight
+.venv\Scripts\python -m src.main --config configs/lab.yaml --track t02 --output out/poc --run-name poc --offline --seed 42
+.venv\Scripts\python -m src.main --config configs/lab.yaml --track t02 --pipeline src.baseline_t02 --output out/baseline --run-name baseline --offline --seed 42
+.venv\Scripts\python -m pytest -q
+```
+
+Evaluate chính thức (cần `gt/` của giảng viên):
+`python -m src.evaluate --track t02 --pred out/poc/ranked_review.csv --run-name poc --out reports/metrics_poc.json`.
+Tự đánh giá trên dev: `python -m tools.t02_self_eval --pred out/poc/ranked_review.csv --run-name poc` ·
+ablation: `python -m tools.t02_ablation`.
