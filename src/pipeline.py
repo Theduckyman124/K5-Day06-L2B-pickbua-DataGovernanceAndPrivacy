@@ -9,19 +9,16 @@ Smooth Sigmoid Scoring Pipeline:
 from __future__ import annotations
 
 from pathlib import Path
-import numpy as np
-from pathlib import Path
+
 import numpy as np
 import pandas as pd
 from PIL import Image
 
 from .common.contact_sheet import render_contact_sheet
-from .common.contact_sheet import render_contact_sheet
 from .common.context import RunContext
 from .common.decision import Decision, write_decision
 from .common.image_ops import load_rgb, to_gray
 from .common.manifest import verify_manifest
-from .common.review import apply_overrides, load_review_decisions, make_review_queue, write_review_queue
 from .common.review import apply_overrides, load_review_decisions, make_review_queue, write_review_queue
 from .metrics.tracks import get_track
 
@@ -255,35 +252,52 @@ def review(ctx: RunContext, scored: pd.DataFrame, queue: pd.DataFrame) -> pd.Dat
             scored,
             reviewed,
             id_col="image_id",
+            value_col="pred_action",
             audit=ctx.audit,
-            target_cols=["pred_action"],
-            override_col="override_value",
         )
     return scored
 
 
 # ---------------------------------------------------------------- 05 decide
-def decide(ctx: RunContext, final: pd.DataFrame) -> Decision:
-    """Enact gate decision based on triage findings."""
-    owner = ctx.config.get("owner", "QC Lead")
-    recapture_count = (final["pred_action"] == "RECAPTURE").sum()
+MAX_RECAPTURE_RATE = 0.20  # batch policy, see reports/review_policy.md §3
 
-    if recapture_count > 0:
-        return Decision(
-            status="REWORK",
-            reason_code="DEFECTS_IDENTIFIED",
-            reason=f"Identified {recapture_count} defective raw images requiring exclusion/recapture before release",
-            owner=owner,
-            scope=ctx.track,
-            evidence=[str(ctx.out("ranked_review.csv")), str(ctx.out("review_queue.csv"))],
-        )
+
+def decide(ctx: RunContext, final: pd.DataFrame) -> Decision:
+    """Batch gate per reports/review_policy.md §3.
+
+    recapture_rate > 0.20 and not reviewed -> HOLD   / HIGH_DEFECT_RATE_HOLD
+    recapture_rate > 0.20 and reviewed     -> REWORK / RECAPTURE_REQUIRED
+    recapture_rate <= 0.20                 -> GO     / DEFECT_RATE_ACCEPTABLE
+    """
+    owner = ctx.config.get("owner", "QC Lead")
+    n_total = len(final)
+    n_recapture = int((final["pred_action"] == "RECAPTURE").sum()) if "pred_action" in final.columns else 0
+    recapture_rate = n_recapture / max(n_total, 1)
+    has_review = ctx.stats.get("n_reviewed", 0) > 0
+
+    ctx.stats["n_recapture"] = n_recapture
+    ctx.stats["recapture_rate"] = round(recapture_rate, 4)
+
+    if recapture_rate > MAX_RECAPTURE_RATE:
+        if has_review:
+            status, reason_code = "REWORK", "RECAPTURE_REQUIRED"
+            tail = "triage confirmed defective images require recapture"
+        else:
+            status, reason_code = "HOLD", "HIGH_DEFECT_RATE_HOLD"
+            tail = "pending human sign-off on review queue"
+        reason = f"High defect rate ({n_recapture}/{n_total} = {recapture_rate:.1%}); {tail}"
+    else:
+        status, reason_code = "GO", "DEFECT_RATE_ACCEPTABLE"
+        reason = f"Defect rate ({recapture_rate:.1%}) within acceptable operating tolerance"
+
     return Decision(
-        status="GO",
-        reason_code="ALL_PASS",
-        reason="Intake pool passed raw visual quality gate",
+        status=status,
+        reason_code=reason_code,
+        reason=reason,
         owner=owner,
         scope=ctx.track,
-        evidence=[str(ctx.out("ranked_review.csv"))],
+        evidence=[str(ctx.out("ranked_review.csv")), str(ctx.out("review_queue.csv"))],
+        metrics={"n_total": n_total, "n_recapture": n_recapture, "recapture_rate": round(recapture_rate, 4)},
     )
 
 
