@@ -1,0 +1,57 @@
+image_id,split,camera_id,light,defect_type,severity,is_defect,note
+img_00_0,dev,cam_B,day,none,0,0,ảnh gốc của cảnh; độ mềm quang học cam_B
+img_00_1,dev,cam_B,day,none,0,0,"nét, đủ sáng như ảnh gốc của cảnh; độ mềm quang học cam_B"
+img_00_2,dev,cam_B,day,compression,2,1,"vỡ khối 8x8, biển số mất chữ"
+img_00_3,dev,cam_B,day,blur,2,1,"nhoè toàn ảnh, biển số không đọc được"
+img_02_0,dev,cam_A,day,none,0,0,ảnh gốc của cảnh
+img_02_1,dev,cam_A,day,none,0,0,"nét, đủ sáng như ảnh gốc của cảnh"
+img_02_2,dev,cam_A,day,glare,2,1,"lóa cục bộ che biển số xe phải, phần còn lại nét"
+img_02_3,dev,cam_A,day,dark,2,1,"cảnh ngày bị tối, mất chi tiết tòa nhà và mặt đường"
+img_04_0,dev,cam_A,dusk,none,0,0,ảnh gốc của cảnh
+img_04_1,dev,cam_A,dusk,none,0,0,"nét, đủ sáng như ảnh gốc của cảnh"
+img_04_2,dev,cam_A,dusk,compression,2,1,"trời và tòa nhà vỡ khối, biển số mất chữ"
+img_04_3,dev,cam_A,dusk,blur,2,1,"nhoè đều, biển số không đọc được"
+img_07_0,dev,cam_A,day,none,0,0,ảnh gốc của cảnh
+img_07_1,dev,cam_A,day,none,0,0,"nét, đủ sáng như ảnh gốc của cảnh"
+img_07_2,dev,cam_A,day,dark,2,1,"cảnh ngày bị tối, biển số khó đọc"
+img_07_3,dev,cam_A,day,blur,2,1,"nhoè đều, biển số không đọc được"
+img_08_0,dev,cam_A,dusk,none,0,0,ảnh gốc của cảnh
+img_08_1,dev,cam_A,dusk,none,0,0,"nét, đủ sáng như ảnh gốc của cảnh"
+img_08_2,dev,cam_A,dusk,compression,1,1,"trời hoàng hôn thành dải màu, viền răng cưa nhẹ"
+img_08_3,dev,cam_A,dusk,dark,1,1,"tối hơn ảnh hoàng hôn gốc, tòa nhà mất chi tiết; biển số vẫn đọc được"
+img_09_0,dev,cam_B,day,none,0,0,ảnh gốc của cảnh; độ mềm quang học cam_B
+img_09_1,dev,cam_B,day,none,0,0,"nét, đủ sáng như ảnh gốc của cảnh; độ mềm quang học cam_B"
+img_09_2,dev,cam_B,day,blur,2,1,"nhoè mạnh, biển số mất"
+img_09_3,dev,cam_B,day,compression,1,1,"răng cưa nhẹ, chữ biển số nhoè khối"
+img_10_0,dev,cam_A,day,none,0,0,ảnh gốc của cảnh
+img_10_1,dev,cam_A,day,none,0,0,"nét, đủ sáng như ảnh gốc của cảnh"
+img_10_2,dev,cam_A,day,compression,2,1,"tòa nhà, người vỡ khối, biển số mất chữ"
+img_10_3,dev,cam_A,day,dark,1,1,"cảnh ngày bị tối, biển số vẫn đọc được"
+img_11_0,dev,cam_A,day,none,0,0,ảnh gốc của cảnh
+img_11_1,dev,cam_A,day,none,0,0,"nét, đủ sáng như ảnh gốc của cảnh"
+img_11_2,dev,cam_A,day,compression,2,1,"vỡ khối, biển số mất chữ"
+img_11_3,dev,cam_A,day,blur,2,1,"nhoè đều, biển số không đọc được"
+img_12_0,dev,cam_B,dusk,none,0,0,ảnh gốc của cảnh; độ mềm quang học cam_B
+img_12_1,dev,cam_B,dusk,none,0,0,"nét, đủ sáng như ảnh gốc của cảnh; độ mềm quang học cam_B"
+img_12_2,dev,cam_B,dusk,compression,1,1,"viền răng cưa, chữ biển số mất"
+img_12_3,dev,cam_B,dusk,dark,2,1,"tối hơn ảnh hoàng hôn gốc, xe và người chỉ còn viền"
+img_14_0,dev,cam_A,day,none,0,0,ảnh gốc của cảnh
+img_14_1,dev,cam_A,day,none,0,0,"nét, đủ sáng như ảnh gốc của cảnh"
+img_14_2,dev,cam_A,day,blur,2,1,"nhoè đều, 3 biển số không đọc được"
+img_14_3,dev,cam_A,day,compression,2,1,"vỡ khối, biển số mất chữ"
+img_18_0,dev,cam_B,night,none,0,0,ảnh gốc của cảnh; tối tự nhiên của cảnh đêm; độ mềm quang học cam_B
+img_18_1,dev,cam_B,night,none,0,0,"nét, đủ sáng như ảnh gốc của cảnh; tối tự nhiên của cảnh đêm; độ mềm quang học cam_B"
+img_18_2,dev,cam_B,night,glare,2,1,"ảnh đêm, lóa cục bộ che biển số xe xanh"
+img_18_3,dev,cam_B,night,blur,2,1,ảnh đêm bị nhoè mạnh
+img_20_0,dev,cam_A,day,none,0,0,ảnh gốc của cảnh
+img_20_1,dev,cam_A,day,none,0,0,"nét, đủ sáng như ảnh gốc của cảnh"
+img_20_2,dev,cam_A,day,dark,1,1,"cảnh ngày bị tối, biển số vẫn đọc được"
+img_20_3,dev,cam_A,day,glare,2,1,lóa cục bộ che biển số xe hồng
+img_21_0,dev,cam_B,day,none,0,0,ảnh gốc của cảnh; độ mềm quang học cam_B
+img_21_1,dev,cam_B,day,none,0,0,"nét, đủ sáng như ảnh gốc của cảnh; độ mềm quang học cam_B"
+img_21_2,dev,cam_B,day,blur,2,1,"nhoè mạnh, biển số mất"
+img_21_3,dev,cam_B,day,compression,2,1,"tòa nhà vỡ khối, biển số mất chữ"
+img_22_0,dev,cam_A,dusk,none,0,0,ảnh gốc của cảnh
+img_22_1,dev,cam_A,dusk,none,0,0,"nét, đủ sáng như ảnh gốc của cảnh"
+img_22_2,dev,cam_A,dusk,compression,2,1,"trời thành dải màu, biển số mất chữ"
+img_22_3,dev,cam_A,dusk,glare,2,1,"vùng lóa phủ nửa phải, xe máy mờ"
